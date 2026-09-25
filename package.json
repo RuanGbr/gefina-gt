@@ -1,0 +1,10 @@
+{
+    "name": "GEFINA",
+    "version": "0.0.0",
+    "description": "Sistema de gestão de conta a receber.",
+    "author": "Ruan Gabriel",
+    "type": "module",
+    "scripts": {
+        "dev": "node --watch ./server.ts"
+    }
+}
