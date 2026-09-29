@@ -72,6 +72,9 @@ app.get("/api/invoices/:id", function (request, response) {
   const invoice = invoices.find((invoices) => {
     return invoices.id === +request.params.id;
   });
+  if (invoice === undefined){
+    return response.status(404).json({status: "Recurso nao encontrado"})
+  }
   response.status(200).json(invoice);
 });
 
