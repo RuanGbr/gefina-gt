@@ -60,30 +60,19 @@
                 return 'Pago';
             }
             
+            function rows(row,value){
+                const td = document.createElement('td')
+                td.textContent = value
+                row.appendChild(td)
+            }
             for (let i = 0; i < invoices.length; i++) {
+                const row = document.createElement('tr')
                 const invoice = invoices[i];
-                const row = document.createElement('tr');
-
-                const client = document.createElement('td');
-                client.textContent = invoice.customer.name;
-                row.appendChild(client);
-
-                const amount = document.createElement('td');
-                amount.textContent = invoice.amount;
-                row.appendChild(amount);
-                
-                const issueDate = document.createElement('td');
-                issueDate.textContent = invoice.issueDate;
-                row.appendChild(issueDate);
-
-                const dueDate = document.createElement('td');
-                dueDate.textContent = invoice.dueDate;
-                row.appendChild(dueDate);
-
-                const status = document.createElement('td');
-                status.textContent = statusLabel(invoice.status);
-                row.appendChild(status);
-
+                rows(row, invoice.customer.name)
+                rows(row, invoice.amount)
+                rows(row, invoice.issueDate)
+                rows(row, invoice.dueDate)
+                rows(row, statusLabel(invoice.status))
                 tableBody.appendChild(row);
             }
         </script>
