@@ -3,20 +3,12 @@
   "version": "0.0.0",
   "description": "Sistema de gestão de conta a receber.",
   "author": "Ruan Gabriel",
-  "type": "module",
   "scripts": {
     "check": "tsc --noEmit && npx @biomejs/biome check ./",
     "fix": "biome check --write ./",
-    "fix:unsafe": "biome check --write --unsafe ./",
-    "dev": "node --watch ./server.ts"
+    "fix:unsafe": "biome check --write --unsafe ./"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
-    "@types/express": "^5.0.6",
-    "@types/node": "^26.6.3",
-    "typescript": "^7.0.2"
-  },
-  "dependencies": {
-    "express": "^5.2.1"
+    "@biomejs/biome": "2.5.15"
   }
 }
