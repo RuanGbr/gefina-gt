@@ -92,7 +92,10 @@
                 );
             }
 
-            ReactDOM.createRoot(container).render(<InvoiceTable invoices={invoices} />);
+            function App(){
+                return <InvoiceTable invoices = {invoices}/>
+            }
+            ReactDOM.createRoot(container).render(<App/>);
         </script>
     </body>
 </html>
