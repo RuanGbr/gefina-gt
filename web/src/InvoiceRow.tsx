@@ -7,7 +7,7 @@ interface InvoiceRowProps{
 export default function InvoiceRow(props: InvoiceRowProps){
     const invoice = props.invoice
     return <tr>
-    <td>{invoice.customerId}</td>
+    <td>{invoice.customer.name}</td>
     <td>{invoice.amount}</td>
     <td>{invoice.issueDate}</td>
     <td>{invoice.dueDate}</td>

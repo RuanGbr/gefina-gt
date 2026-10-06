@@ -6,7 +6,7 @@ export interface Invoice {
   status: InvoiceStatus;
   issueDate: string;
   dueDate: string;
-  customerId: number;
+  customer: Customer;
 }
 interface Customer {
   id: number;
