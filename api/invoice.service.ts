@@ -59,7 +59,7 @@ const baseQuery=`
   ELSE 'pending'
   END AS situation,
     invoices.issue_date::text,
-    invoices.due_date,
+    invoices.due_date::text,
     customers.id AS customer_id,
     customers.name AS customer_name,
     customers.email AS customer_email
