@@ -1,5 +1,5 @@
-import {Invoice, InvoiceStatus} from './invoiceType.ts'
-import statusLabel from './statusLabel.ts'
+import {Invoice} from './invoiceType.ts'
+import situatonLabel from './situationLabel.ts'
 interface InvoiceRowProps{
     invoice: Invoice
 }
@@ -11,6 +11,6 @@ export default function InvoiceRow(props: InvoiceRowProps){
     <td>{invoice.amount}</td>
     <td>{invoice.issueDate}</td>
     <td>{invoice.dueDate}</td>
-    <td>{statusLabel(invoice.status)}</td>
+    <td>{situatonLabel(invoice.situation)}</td>
     </tr>
 }
