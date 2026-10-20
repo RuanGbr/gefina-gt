@@ -8,5 +8,5 @@ export default function SummaryCardProps(props:SummaryCardProps){
         <p>{props.label} </p>
         <p>{props.value} </p>
 
-    </div>
+    </div>;
 }
