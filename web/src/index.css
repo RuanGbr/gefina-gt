@@ -46,4 +46,18 @@ th {
 }
 .numeric {
   font-variant-numeric: tabular-nums;
+} 
+
+a {
+  color: var(--color-primary);
+}
+
+.situantion-paid {
+  color: var(--color-paid)
+}
+.situantion-pending {
+  color: var(--color-pending)
+}
+.situantion-overdue{
+  color: var(--color-overdue)
 }
