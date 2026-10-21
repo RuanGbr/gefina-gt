@@ -6,7 +6,7 @@ interface SummaryCardProps{
 export default function SummaryCardProps(props:SummaryCardProps){
     return <div>
         <p>{props.label} </p>
-        <p>{props.value} </p>
+        <p className="numeric">{props.value} </p>
 
     </div>;
 }
