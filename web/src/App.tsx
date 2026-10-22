@@ -5,16 +5,16 @@ import InvoicePage from "./InvoicePage";
 
 export default function App() {
     return <BrowserRouter>
-    <aside>
-        <header>Gefina</header>
-            <nav>
+    <aside className='sidebar'>
+        <header className='brand'>Gefina</header>
+            <nav className='menu'>
                 <ul>
                     <li><Link to='/'>Painel Inicial</Link></li>
                     <li><Link to='/faturas'>Faturas</Link></li>
                 </ul>
             </nav>
     </aside>
-        <main>
+        <main className='content'>
             <Routes>
                 <Route path='/' element={<DashboardPage />} />
                 <Route path='/faturas' element={<InvoicePage />} />
