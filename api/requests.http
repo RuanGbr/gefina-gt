@@ -9,6 +9,15 @@ GET {{host}}/api/dashboard
 ### Buscar todas as faturas
 GET {{host}}/api/invoices
 
+### Buscar fatura por identificador 
+GET {{host}}/api/invoices/1
+
+### Buscar fatura por identificador inválido
+GET {{host}}/api/invoices/abc
+
+### Buscar fatura por identificador inexistente
+GET {{host}}/api/invoices/999999
+
 ### Buscar uma fatura pelo identificador
 GET {{host}}/api/invoices/1
 
