@@ -3,8 +3,10 @@ import path, { join } from 'node:path';
 import dashboard from './dashboard.route.ts'
 import invoices from './invoice.route.ts';
 import pool from './database.ts';
-
+import handleError from './error.middleware.ts';
 const app = express();
+app.use(express.json());
+
 const dist = path.join(import.meta.dirname, '..', 'web', 'dist');
 
 app.use((request, _response, next) => {
@@ -31,18 +33,22 @@ app.get('/api/health', async(_request, response) => {
 
 app.use('/api/dashboard', dashboard);
 app.use('/api/invoices', invoices);
-app.use(express.static(dist));
+
+app.use(express.static(dist))
+
 app.use((request,response, next)=>{
 if(request.url.startsWith('/api')|| request.method !=='GET'){
   next();
   return;
 }
-response.sendFile(join(dist,'index.html'));
+response.sendFile(path.join(dist,'index.html'))
 })
 
 app.use((_request, response) => {
   response.status(404).json({ message: 'Recurso não encontrado.' });
 });
+
+app.use(handleError)
 
 app.listen(Number(process.env.PORT) || 3000);
 
