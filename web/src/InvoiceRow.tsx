@@ -10,7 +10,7 @@ export default function InvoiceRow(props: InvoiceRowProps){
     return <tr>
     <td>{invoice.customer.name}</td>
     <td className='numeric'>{formatCurrency(invoice.amount)} </td>
-    <td className='numeric numeric date'>{formatDate(invoice.issueDate)}</td>
+    <td className='numeric numeric-date'>{formatDate(invoice.issueDate)}</td>
     <td className='numeric numeric-date'>{formatDate(invoice.dueDate)}</td>
     <td className={situationClass(invoice.situation)}>{situationLabel(invoice.situation)}</td>
     </tr>
