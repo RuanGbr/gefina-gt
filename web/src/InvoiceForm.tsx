@@ -44,7 +44,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
     }
     return <form onSubmit={handleSubmit}>
         <h2>{!props.invoice ? 'Criar fatura' : 'Editar fatura'}</h2>
-        <div>
+        <div className='field'>
             <label htmlFor='customer'>Cliente</label>
             <select
                 id='customer'
@@ -61,7 +61,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             </select>
         </div>
 
-        <div>
+        <div className='field'>
             <label htmlFor="amount">Valor</label>
             <input
                 id='amount'
@@ -74,7 +74,8 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             />
         </div>
 
-        <div>
+         <div className='horizontal-fields'>
+            <div className='field'>
             <label htmlFor="status">Situação</label>
             <select id="status"
                 value={status}
@@ -98,27 +99,30 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             <label htmlFor="dueDate">Vencimento</label>
             <input
                 id="dueDate"
-                type='date'
+                type='date' 
                 value={dueDate}
                 onChange={(event) => setDueDate(event.target.value)}
                 required
             />
         </div>
+         </div>   
+        
+         {!props.error ? null : <p>{props.error}</p>}    
 
-         {!props.error ? null : <p>{props.error}</p>}       
-
-        <div>
+        <div className='form-actions'>
             {!props.invoice ? null : <button 
             type="button"
             onClick={props.onDelete}
             disabled={props.busy}
             >Excluir</button>}
             <button
+            className='button-secondary'
              type="button"
              onClick={props.onCancel}
              disabled={props.busy}
              >Cancelar</button>
             <button 
+            className='button-primary'
             type="submit"
             disabled={props.busy}
             >{props.busy ? 'Salvando....' : 'Salvar'}</button>
