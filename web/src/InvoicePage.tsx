@@ -7,7 +7,8 @@ import InvoiceForm from "./InvoiceForm.tsx";
 import { 
   getAllInvoice, 
   createInvoice, 
-  updateInvoice 
+  updateInvoice,
+  deleteInvoice
 } from "./invoiceApi.ts";
 import { CustomerOption } from "./customerType.ts";
 
@@ -20,6 +21,7 @@ export default function   InvoicePage(){
   const [loading, setLoading] = useState<boolean>(true)
   const [dialogContent,setDialogContent] = useState(false)
   const [target, setTarget] = useState<Invoice| null>(null)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   const dialogRef= useRef<HTMLDialogElement>(null)
   function openModal(invoice: Invoice | null){
@@ -82,12 +84,30 @@ useEffect(() =>{
       } else {
         await updateInvoice(target.id, datas)
       }
+      await refresh();
+      closeModal()
+    }catch(error){
+      if(error instanceof Error) setFormError(error.message)
+    } 
+  setBusy(false);
+  }
+
+  async function confirm(){
+    if(!target) return;
+
+    setBusy(true)
+    setFormError(null);
+
+    try {
+      await deleteInvoice(target.id)
+
+      setConfirmDelete(false)
       closeModal()
       await refresh();
     }catch(error){
-      if(error instanceof Error) setError(error.message)
-    } 
-  setBusy(false);
+      if(error instanceof Error) setFormError(error.message)
+    }
+  setBusy(false)
   }
 
   if(loading) return <p>Carregando Faturas....</p>
@@ -108,26 +128,23 @@ useEffect(() =>{
     edit={openModal}
     /> 
    </div>
-   <InvoiceForm
-    invoice={null}
-    customers={customersOptions}
-    error={formError}
-    onDelete={() => null}
-    onCancel={closeModal}
-    onSubmit={submit}
-    busy={busy}
-   
-   />
+
    <dialog 
    className='invoice-modal'
    ref={dialogRef}
-   onClose={() => setDialogContent(false)}
+   onClose={() => {
+    setDialogContent(false);
+    setConfirmDelete(false)
+   }}
    >
     {dialogContent && <InvoiceForm
     invoice={target}
     customers={customersOptions}
     error={formError}
-    onDelete={() => null}
+    onDelete={() => setConfirmDelete(true)}
+    confirmDelete= {confirmDelete}
+    setConfirmDelete= {setConfirmDelete}
+    confirm={confirm}
     onCancel={closeModal}
     onSubmit={submit}
     busy={busy}

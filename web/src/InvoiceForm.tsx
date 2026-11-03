@@ -1,5 +1,5 @@
 
-import { useState, SubmitEvent } from "react";
+import { useState, SubmitEvent, SetStateAction } from "react";
 import { Invoice, InvoiceInput, InvoiceStatus } from "./invoiceType";
 import { CustomerOption } from "./customerType";
 
@@ -7,6 +7,9 @@ interface InvoiceFormProps {
     invoice: Invoice | null;
     customers: CustomerOption[];
     error: string | null;
+    confirmDelete: boolean;
+    setConfirmDelete: React.Dispatch<SetStateAction<boolean>>;
+    confirm: () => void;
     onDelete: () => void;
     onCancel: () => void;
     onSubmit: (values: InvoiceInput) => void;
@@ -33,6 +36,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
 
     const handleSubmit = (event: SubmitEvent) => {
         event.preventDefault();
+        props.setConfirmDelete(false);
 
         props.onSubmit({
             customerId: Number(customerId),
@@ -116,7 +120,8 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             type="button"
             onClick={props.onDelete}
             disabled={props.busy}
-            >Excluir</button>}
+            className="button-danger"
+            >{props.busy  && props.confirmDelete ? 'Excluindo....' : 'Excluir'}</button>}
             <button
             className='button-secondary'
              type="button"
@@ -127,7 +132,28 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             className='button-primary'
             type="submit"
             disabled={props.busy}
-            >{props.busy ? 'Salvando....' : 'Salvar'}</button>
+            >{props.busy && !props.confirmDelete ? 'Salvando....' : 'Salvar'}</button>
         </div>
+
+                
+        {props.confirmDelete && <div className='confirm-form'>
+            <p>A exclusão é definitiva e não pode ser desfeita. Deseja prosseguir?</p>
+
+        <div>
+            <button 
+            className="button-secondary"
+            type='button'
+            onClick={() => props.setConfirmDelete(false)}
+            disabled={props.busy}
+            >Não</button>
+            <button
+            className='button-danger'
+            type='button'
+            onClick={props.confirm}
+            disabled={props.busy}
+            >Sim</button>
+        </div>
+        </div>}
+
     </form>
 }
