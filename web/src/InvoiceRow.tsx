@@ -3,6 +3,7 @@ import {situationLabel, formatCurrency, formatDate, situationClass} from './util
 
 interface InvoiceRowProps{
     invoice: Invoice
+    edit: (invoice: Invoice) => void
 }
 
 export default function InvoiceRow(props: InvoiceRowProps){
@@ -13,5 +14,6 @@ export default function InvoiceRow(props: InvoiceRowProps){
     <td className='numeric numeric-date'>{formatDate(invoice.issueDate)}</td>
     <td className='numeric numeric-date'>{formatDate(invoice.dueDate)}</td>
     <td className={situationClass(invoice.situation)}>{situationLabel(invoice.situation)}</td>
+    <td className='td-button'><button className='button-secondary' type='button' onClick={() => props.edit(invoice)}>Alterar</button> </td>
     </tr>
 }

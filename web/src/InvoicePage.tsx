@@ -4,7 +4,11 @@ import InvoiceTable from "./InvoiceTable.tsx";
 import { Invoice, InvoiceInput } from "./invoiceType.ts";
 import InvoiceForm from "./InvoiceForm.tsx";
 
-import { getAllInvoice, createInvoice } from "./invoiceApi.ts";
+import { 
+  getAllInvoice, 
+  createInvoice, 
+  updateInvoice 
+} from "./invoiceApi.ts";
 import { CustomerOption } from "./customerType.ts";
 
 export default function   InvoicePage(){
@@ -15,9 +19,11 @@ export default function   InvoicePage(){
   const [formError, setFormError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [dialogContent,setDialogContent] = useState(false)
+  const [target, setTarget] = useState<Invoice| null>(null)
 
   const dialogRef= useRef<HTMLDialogElement>(null)
-  function openModal(){
+  function openModal(invoice: Invoice | null){
+    setTarget(invoice);
     setFormError(null);
     setDialogContent(true);
     dialogRef.current?.showModal();
@@ -71,8 +77,12 @@ useEffect(() =>{
     setFormError(null);
 
     try{
-      await createInvoice(datas)
-      closeModal();
+      if(!target){
+        await createInvoice(datas)
+      } else {
+        await updateInvoice(target.id, datas)
+      }
+      closeModal()
       await refresh();
     }catch(error){
       if(error instanceof Error) setError(error.message)
@@ -89,18 +99,21 @@ useEffect(() =>{
   <h1 className="page-header">Faturas</h1>
     <button
     className="button-primary"
-    onClick={openModal}>Nova fatura</button>
+    onClick={() => openModal(null)}>Nova fatura</button>
   </header>
    
    <div className="panel">
-   <InvoiceTable invoices={invoices}/> 
+   <InvoiceTable
+    invoices={invoices}
+    edit={openModal}
+    /> 
    </div>
    <InvoiceForm
     invoice={null}
     customers={customersOptions}
     error={formError}
     onDelete={() => null}
-    onCancel={() => null}
+    onCancel={closeModal}
     onSubmit={submit}
     busy={busy}
    
@@ -111,11 +124,11 @@ useEffect(() =>{
    onClose={() => setDialogContent(false)}
    >
     {dialogContent && <InvoiceForm
-    invoice={null}
+    invoice={target}
     customers={customersOptions}
     error={formError}
     onDelete={() => null}
-    onCancel={() => null}
+    onCancel={closeModal}
     onSubmit={submit}
     busy={busy}
    />}

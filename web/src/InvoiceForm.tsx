@@ -30,6 +30,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
     const [dueDate, setDueDate] = useState
         (!props.invoice ? '' : props.invoice.dueDate)
 
+
     const handleSubmit = (event: SubmitEvent) => {
         event.preventDefault();
 
@@ -85,7 +86,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
                 <option value='paid'>Paga</option>
             </select>
         </div>
-        <div>
+        <div className='field'>
             <label htmlFor="issueDate">Emissão</label>
             <input
                 id="issueDate"
@@ -95,11 +96,12 @@ export default function InvoiceForm(props: InvoiceFormProps) {
                 required
             />
         </div>
-        <div>
+        <div className='field'>
             <label htmlFor="dueDate">Vencimento</label>
             <input
                 id="dueDate"
                 type='date' 
+                min={issueDate}
                 value={dueDate}
                 onChange={(event) => setDueDate(event.target.value)}
                 required
