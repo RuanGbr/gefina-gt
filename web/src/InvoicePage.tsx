@@ -115,7 +115,7 @@ useEffect(() =>{
     return <p>{error}</p>
   }
   return <>
-   <header>
+   <header className='page-header'>
   <h1 className="page-header">Faturas</h1>
     <button
     className="button-primary"

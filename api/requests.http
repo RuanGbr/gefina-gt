@@ -1,18 +1,18 @@
 @host = http://localhost:3000
 
-### Verificação de saúde
+### Verificar saúde
 GET {{host}}/api/health
 
-### Consultar métricas do painel inicial
+### Consultar métricas
 GET {{host}}/api/dashboard
 
 ### Buscar opções de clientes
 GET {{host}}/api/customers/options
 
-### Buscar todas as faturas
+### Buscar faturas
 GET {{host}}/api/invoices
 
-### Buscar fatura por identificador 
+### Buscar fatura por identificador
 GET {{host}}/api/invoices/1
 
 ### Buscar fatura por identificador inválido
@@ -21,34 +21,81 @@ GET {{host}}/api/invoices/abc
 ### Buscar fatura por identificador inexistente
 GET {{host}}/api/invoices/999999
 
-### Buscar uma fatura pelo identificador
-GET {{host}}/api/invoices/1
-
 ### Criar fatura
 POST {{host}}/api/invoices
 Content-Type: application/json
 
 {
-"customerId": 1,
-"amount": 125037,
-"status": "pending",
-"issueDate": "2026-10-01",
-"dueDate": "2026-10-31"
+    "customerId": 1,
+    "amount": 125037,
+    "status": "pending",
+    "issueDate": "2026-11-01",
+    "dueDate": "2026-11-31"
 }
 
+### Criar fatura sem corpo
+POST {{host}}/api/invoices
+Content-Type: application/json
 
-### Alterar fatura 
+### Criar fatura com valor zerado
+POST {{host}}/api/invoices
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "amount": 0,
+    "status": "pending",
+    "issueDate": "2026-11-01",
+    "dueDate": "2026-11-30"
+}
+
+### Criar fatura com situação inválida
+POST {{host}}/api/invoices
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "amount": 125037,
+    "status": "cancelled",
+    "issueDate": "2026-11-01",
+    "dueDate": "2026-11-30"
+}
+
+### Criar fatura com data de vencimento anterior à data de emissão
+POST {{host}}/api/invoices
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "amount": 125037,
+    "status": "pending",
+    "issueDate": "2026-11-30",
+    "dueDate": "2026-11-01"
+}
+
+### Criar fatura com data inexistente
+POST {{host}}/api/invoices
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "amount": 125037,
+    "status": "pending",
+    "issueDate": "2026-11-01",
+    "dueDate": "2026-11-31"
+}
+
+### Atualizar fatura
 PUT {{host}}/api/invoices/181
 Content-Type: application/json
 
 {
-"customerId": 1,
-"amount": 125037,
-"status": "paid",
-"issueDate": "2026-10-01",
-"dueDate": "2026-10-31"
+    "customerId": 1,
+    "amount": 125037,
+    "status": "paid",
+    "issueDate": "2026-11-01",
+    "dueDate": "2026-11-22"
 }
 
-### DELETAR FATURA
-
+### Deletar fatura
 DELETE {{host}}/api/invoices/181
