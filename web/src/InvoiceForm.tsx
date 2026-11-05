@@ -1,12 +1,13 @@
 
 import { useState, SubmitEvent, SetStateAction } from "react";
-import { Invoice, InvoiceInput, InvoiceStatus } from "./invoiceType";
+import { Invoice, InvoiceInput, InvoiceStatus, InvoiceFieldErrors } from "./invoiceType";
 import { CustomerOption } from "./customerType";
 
 interface InvoiceFormProps {
     invoice: Invoice | null;
     customers: CustomerOption[];
     error: string | null;
+    fieldErrors: InvoiceFieldErrors;
     confirmDelete: boolean;
     setConfirmDelete: React.Dispatch<SetStateAction<boolean>>;
     confirm: () => void;
@@ -19,7 +20,7 @@ interface InvoiceFormProps {
 
 export default function InvoiceForm(props: InvoiceFormProps) {
     const [customerId, setCustomerId] = useState
-        (!props.invoice ? '' : props.invoice.customer.id);
+        (!props.invoice ? undefined : String(props.invoice.customer.id));
 
     const [amount, setAmount] = useState
         (!props.invoice ? '' : (props.invoice.amount / 100).toFixed(2));
@@ -55,7 +56,8 @@ export default function InvoiceForm(props: InvoiceFormProps) {
                 id='customer'
                 value={customerId}
                 onChange={(event) => setCustomerId(event.target.value)}
-                required>
+                required
+                >
 
                 <option value=''>Selecione um cliente</option>
                 {props.customers.map((customer) => {
@@ -154,6 +156,11 @@ export default function InvoiceForm(props: InvoiceFormProps) {
             >Sim</button>
         </div>
         </div>}
-
+        {props.fieldErrors.customerId && <p className="form-error">{props.fieldErrors.customerId}</p>}
+        {props.fieldErrors.amount && <p className="form-error">{props.fieldErrors.amount}</p>}
+        {props.fieldErrors.status && <p className="form-error">{props.fieldErrors.status}</p>}
+        {props.fieldErrors.issueDate && <p className="form-error">{props.fieldErrors.issueDate}</p>}
+        {props.fieldErrors.dueDate && <p className="form-error">{props.fieldErrors.dueDate}</p>}
+        {props.error && <p className="form-error">{props.error}</p>}
     </form>
 }
