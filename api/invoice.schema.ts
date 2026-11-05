@@ -1,4 +1,3 @@
-import { error } from 'node:console';
 import { z, type ZodError } from 'zod';
 
 const invoiceStatusSchema = z.enum(
@@ -15,6 +14,7 @@ export const invoiceSchema = z
     .object(
         {
         customerId: z
+                
                 .number('O cliente é obrigatório.')
                 .int('O identificador do cliente deve ser um número inteiro.')
                 .positive('O identificador do cliente deve ser maior que zero.'),

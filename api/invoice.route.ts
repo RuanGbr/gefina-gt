@@ -32,12 +32,15 @@ router.get('/:id', async (request, response) => {
   }
 
   const invoice = await findInvoiceById(id);
-  if (!invoice) response.status(404).json({
+  if (!invoice) { 
+     response.status(404).json({
     error: {
       status: 404,
       message: 'Fatura não encontrada.'
     }
-  });
+  })
+  return
+  };
   response.status(200).json(invoice);
 })
 
@@ -56,13 +59,15 @@ router.post('/', async (request, response) => {
 
   const invoice = await insertInvoice(result.data);
 
-  if (!invoice)
+  if (!invoice) { 
     response.status(404).json({
       error: {
         status: 404,
         message: 'Fatura não encontrada.'
       }
-    });
+    }) 
+  return
+  };
   response.status(201).json(invoice)
 })
 
@@ -83,13 +88,15 @@ router.put('/:id', async (request, response) => {
     request.body
   );
 
-  if (!invoice) response.status(404).json({
+  if (!invoice) { response.status(404).json({
     error: {
       status: 404,
       message: 'Fatura não encontrada.'
     }
-  });
-
+  }) 
+  return
+};
+  
   response.status(200).json(invoice);
 });
 
@@ -108,12 +115,14 @@ router.delete('/:id', async (request, response) => {
 
   const deleted = await removeInvoice(Number(request.params.id));
 
-  if (!deleted) response.status(404).json({
+  if (!deleted) {response.status(404).json({
     error: {
       status: 404,
       message: 'Fatura não encontrada.'
     }
-  });
+  })
+  return
+};
 
   response.status(204).end();
 })
