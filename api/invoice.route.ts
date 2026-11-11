@@ -121,7 +121,7 @@ router.delete('/:id', async (request, response) => {
       message: 'Fatura não encontrada.'
     }
   })
-  return
+  return;
 };
 
   response.status(204).end();

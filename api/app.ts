@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import dashboard from './dashboard.route.ts'
 import invoices from './invoice.route.ts';
 import customers from './customer.router.ts'
-import pool from './database.ts';
+import prisma from './prisma.ts';
 
 import handleError from './error.middleware.ts';
 
@@ -22,15 +22,15 @@ app.use((request, _response, next) => {
 app.get('/api/health', async(_request, response) => {
   try{
     
-    const connect = await pool.query('SELECT datname FROM pg_database WHERE oid = 5;');
+    await prisma.$queryRaw`SELECT 1;`;
     response.status(200).json({
       server: 'Server is running.',
-      database: connect.rows[0].datname
+      database: "Database avaliable."
     });
   }catch(error){
     response.status(500).json({
       server: 'Server is running.',
-      database: 'unavaliable'
+      database: 'Database unvailable'
     })
   }
   
