@@ -1,165 +1,169 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from 'react';
+import type { CustomerOption } from './customerType.ts';
+import InvoiceForm from './InvoiceForm.tsx';
+import InvoiceTable from './InvoiceTable.tsx';
 
-import InvoiceTable from "./InvoiceTable.tsx";
-import { 
-  Invoice, 
-  InvoiceFieldErrors,
-   InvoiceInput } from "./invoiceType.ts";
-import InvoiceForm from "./InvoiceForm.tsx";
-
-import { 
-  getAllInvoice, 
-  createInvoice, 
+import {
+  createInvoice,
+  deleteInvoice,
+  getAllInvoice,
   updateInvoice,
-  deleteInvoice
-} from "./invoiceApi.ts";
-import { CustomerOption } from "./customerType.ts";
+} from './invoiceApi.ts';
+import type {
+  Invoice,
+  InvoiceFieldErrors,
+  InvoiceInput,
+} from './invoiceType.ts';
 
-export default function   InvoicePage(){
+export default function InvoicePage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [customersOptions, setCustomersOptions] = useState<CustomerOption[]>([])
+  const [customersOptions, setCustomersOptions] = useState<
+    CustomerOption[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<InvoiceFieldErrors>({})
-  const [busy, setBusy] = useState(false)
-  const [formError, setFormError] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [dialogContent,setDialogContent] = useState(false)
-  const [target, setTarget] = useState<Invoice| null>(null)
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<InvoiceFieldErrors>(
+    {},
+  );
+  const [busy, setBusy] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [dialogContent, setDialogContent] = useState(false);
+  const [target, setTarget] = useState<Invoice | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const dialogRef= useRef<HTMLDialogElement>(null)
-  function openModal(invoice: Invoice | null){
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  function openModal(invoice: Invoice | null) {
     setTarget(invoice);
     setFormError(null);
     setDialogContent(true);
     dialogRef.current?.showModal();
   }
-  function closeModal(){
-    setFormError(null)
-      dialogRef.current?.close();
+  function closeModal() {
+    setFormError(null);
+    dialogRef.current?.close();
   }
-
-
-useEffect(() =>{
-  async function getInvoices() {
-    try{
-      const datas = await getAllInvoice();
-      setInvoices(datas)  
-    }catch (error){
-      if(error instanceof Error) setError(error.message)
-    }
-    setLoading(false)
-  }
-  getInvoices();
-},[]);
 
   useEffect(() => {
-    async function getCustomersOptions(){
-      try{
-        const response = await fetch('/api/customers/options')
+    async function getInvoices() {
+      try {
+        const datas = await getAllInvoice();
+        setInvoices(datas);
+      } catch (error) {
+        if (error instanceof Error) setError(error.message);
+      }
+      setLoading(false);
+    }
+    getInvoices();
+  }, []);
 
-        if(!response.ok) throw new Error('Falha ao buscar clientes')
-        const datas = await response.json(); 
+  useEffect(() => {
+    async function getCustomersOptions() {
+      try {
+        const response = await fetch('/api/customers/options');
+
+        if (!response.ok) throw new Error('Falha ao buscar clientes');
+        const datas = await response.json();
         setCustomersOptions(datas);
-        
-      }catch(error){
-      if(error instanceof Error) setError(error.message)
-      }  
+      } catch (error) {
+        if (error instanceof Error) setError(error.message);
+      }
     }
     getCustomersOptions();
-  }, [])
+  }, []);
 
-  async function refresh(){
-    try{
+  async function refresh() {
+    try {
       const datas = await getAllInvoice();
       setInvoices(datas);
-    }catch(error){
-      if(error instanceof Error) throw error;;
+    } catch (error) {
+      if (error instanceof Error) throw error;
     }
   }
 
-  async function submit(datas: InvoiceInput){
+  async function submit(datas: InvoiceInput) {
     setBusy(true);
     setFormError(null);
 
-    try{
-      if(!target){
-      const failure = await createInvoice(datas)
-      if (failure) setFieldErrors(failure && failure.fields) 
+    try {
+      if (!target) {
+        const failure = await createInvoice(datas);
+        if (failure) setFieldErrors(failure?.fields);
       } else {
-        await updateInvoice(target.id, datas)
+        await updateInvoice(target.id, datas);
       }
       await refresh();
-      closeModal()
-    }catch(error){
-      if(error instanceof Error) setFormError(error.message)
-    } finally{
-    setBusy(false);
+      closeModal();
+    } catch (error) {
+      if (error instanceof Error) setFormError(error.message);
+    } finally {
+      setBusy(false);
     }
   }
 
-  async function confirm(){
-    if(!target) return;
+  async function confirm() {
+    if (!target) return;
 
-    setBusy(true)
+    setBusy(true);
     setFormError(null);
 
     try {
-      await deleteInvoice(target.id)
+      await deleteInvoice(target.id);
 
-      setConfirmDelete(false)
-      closeModal()
+      setConfirmDelete(false);
+      closeModal();
       await refresh();
-    }catch(error){
-      if(error instanceof Error) setFormError(error.message)
+    } catch (error) {
+      if (error instanceof Error) setFormError(error.message);
     }
-  setBusy(false)
+    setBusy(false);
   }
 
-  if(loading) return <p>Carregando Faturas....</p>
-  if(error){
-    return <p>{error}</p>
+  if (loading) return <p>Carregando Faturas....</p>;
+  if (error) {
+    return <p>{error}</p>;
   }
-  return <>
-   <header className='page-header'>
-  <h1 className="page-header">Faturas</h1>
-    <button
-    className="button-primary"
-    onClick={() => openModal(null)}>Nova fatura</button>
-  </header>
-   
-   <div className="panel">
-   <InvoiceTable
-    invoices={invoices}
-    edit={openModal}
-    /> 
-   </div>
+  return (
+    <>
+      <header className="page-header">
+        <h1 className="page-header">Faturas</h1>
+        <button
+          className="button-primary"
+          type="button"
+          onClick={() => openModal(null)}
+        >
+          Nova fatura
+        </button>
+      </header>
 
-   <dialog 
-   className='invoice-modal'
-   ref={dialogRef}
-   onClose={() => {
-    setDialogContent(false);
-    setConfirmDelete(false);
-    setFieldErrors({})
-   }}
-   >
-    {dialogContent && <InvoiceForm
-    invoice={target}
-    customers={customersOptions}
-    error={formError}
-    fieldErrors={fieldErrors}
-    onDelete={() => setConfirmDelete(true)}
-    confirmDelete= {confirmDelete}
-    setConfirmDelete= {setConfirmDelete}
-    confirm={confirm}
-    onCancel={closeModal}
-    onSubmit={submit}
-    busy={busy}
-   />}
+      <div className="panel">
+        <InvoiceTable invoices={invoices} edit={openModal} />
+      </div>
 
-
-   </dialog>
-   </>
-    
+      <dialog
+        className="invoice-modal"
+        ref={dialogRef}
+        onClose={() => {
+          setDialogContent(false);
+          setConfirmDelete(false);
+          setFieldErrors({});
+        }}
+      >
+        {dialogContent && (
+          <InvoiceForm
+            invoice={target}
+            customers={customersOptions}
+            error={formError}
+            fieldErrors={fieldErrors}
+            onDelete={() => setConfirmDelete(true)}
+            confirmDelete={confirmDelete}
+            setConfirmDelete={setConfirmDelete}
+            confirm={confirm}
+            onCancel={closeModal}
+            onSubmit={submit}
+            busy={busy}
+          />
+        )}
+      </dialog>
+    </>
+  );
 }

@@ -1,13 +1,11 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import express from 'express';
-import path, { join } from 'node:path';
-import fs from 'node:fs'
-
-import dashboard from './dashboard.route.ts'
-import invoices from './invoice.route.ts';
-import customers from './customer.router.ts'
-import prisma from './prisma.ts';
-
+import customers from './customer.router.ts';
+import dashboard from './dashboard.route.ts';
 import handleError from './error.middleware.ts';
+import invoices from './invoice.route.ts';
+import prisma from './prisma.ts';
 
 const app = express();
 app.use(express.json());
@@ -19,44 +17,43 @@ app.use((request, _response, next) => {
   next();
 });
 
-app.get('/api/health', async(_request, response) => {
-  try{
-    
+app.get('/api/health', async (_request, response) => {
+  try {
     await prisma.$queryRaw`SELECT 1;`;
     response.status(200).json({
       server: 'Server is running.',
-      database: "Database avaliable."
+      database: 'Database avaliable.',
     });
-  }catch(error){
+  } catch (_error) {
     response.status(500).json({
       server: 'Server is running.',
-      database: 'Database unvailable'
-    })
+      database: 'Database unvailable',
+    });
   }
-  
 });
 
 app.use('/api/dashboard', dashboard);
 app.use('/api/customers', customers);
 app.use('/api/invoices', invoices);
 
-app.use(express.static(dist))
+app.use(express.static(dist));
 
-app.use((request,response, next)=>{
-if(request.url.startsWith('/api')|| 
-request.method !=='GET' ||
-!fs.existsSync(path.join(dist, 'index.html'))
-){
-  next();
-  return;
-}
-response.sendFile(path.join(dist,'index.html'))
-})
+app.use((request, response, next) => {
+  if (
+    request.url.startsWith('/api') ||
+    request.method !== 'GET' ||
+    !fs.existsSync(path.join(dist, 'index.html'))
+  ) {
+    next();
+    return;
+  }
+  response.sendFile(path.join(dist, 'index.html'));
+});
 
 app.use((_request, response) => {
   response.status(404).json({ message: 'Recurso não encontrado.' });
 });
 
-app.use(handleError)
+app.use(handleError);
 
 export default app;
