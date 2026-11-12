@@ -4,8 +4,9 @@
     "start": "node ./server.ts",
     "dev": "node --watch --env-file=.env ./server.ts",
     "check": "tsc --noEmit",
-    "test": "vitest"
-  },
+    "test": "vitest",
+    "postinstall": "prisma generate",
+    "seed":   "node --env-file=.env ./prisma/seed.ts" },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
     "@types/express": "^5.0.6",
