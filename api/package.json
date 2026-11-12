@@ -6,9 +6,9 @@
     "check": "tsc --noEmit",
     "test": "vitest",
     "postinstall": "prisma generate",
-    "seed": "node --env-file=.env ./prisma/seed.ts"
+    "seed": "node --env-file=.env ./prisma/seed.ts",
+    "migrate:deploy": "prisma migrate deploy"
   },
-  "migrate:deploy": "prisma migrate deploy",
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
     "@types/express": "^5.0.6",
