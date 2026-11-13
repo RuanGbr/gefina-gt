@@ -130,7 +130,7 @@ export default function InvoiceForm(props: InvoiceFormProps) {
         </div>
       </div>
 
-      {!props.error ? null : <p>{props.error}</p>}
+     
 
       <div className="form-actions">
         {!props.invoice ? null : (
