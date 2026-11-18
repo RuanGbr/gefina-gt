@@ -12,7 +12,7 @@ export default function InvoiceSummuaryTable(
   props: InvoiceSummuaryTable,
 ) {
   return (
-    <div className="panel">
+    <div className="flex-1 p-4 bg-surface border border-border rounded-surface">
       <h2>{props.title}</h2>
       <table>
         <thead>

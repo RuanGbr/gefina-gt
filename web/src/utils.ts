@@ -10,10 +10,10 @@ export function situationLabel(situation: InvoiceSituation) {
 
 export function situationClass(situation: InvoiceSituation) {
   return situation === 'paid'
-    ? 'situation-paid'
+    ? 'text-paid'
     : situation === 'pending'
-      ? 'situation-pending'
-      : 'situation-overdue';
+      ? 'text-pending'
+      : 'text-overdue';
 }
 
 export function formatCurrency(cents: number): string {

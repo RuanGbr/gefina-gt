@@ -6,21 +6,22 @@ interface InvoiceTableProps {
   edit: (invoice: Invoice) => void;
 }
 export default function InvoiceTable(props: InvoiceTableProps) {
-  const invoices = props.invoices;
+
+  const theaderStyle='text-left text-sm font-medium p-3 border-b border-border text-text-muted'
   return (
-    <table>
+    <table className='w-full border-collapse'>
       <thead>
         <tr>
-          <th>Cliente</th>
-          <th>Valor</th>
-          <th className="numeric-date">Data de Emissão</th>
-          <th className="numeric-date">Data de Vencimento</th>
-          <th>Situação</th>
-          <th></th>
+          <th className={`${theaderStyle} text-left`}>Cliente</th>
+          <th className={`${theaderStyle} text-left`}>Valor</th>
+          <th className={theaderStyle}>Data de Emissão</th>
+          <th className={theaderStyle}>Data de Vencimento</th>
+          <th className={theaderStyle}>Situação</th>
+          <th className={theaderStyle}></th>
         </tr>
       </thead>
       <tbody>
-        {invoices.map((invoice) => (
+        {props.invoices.map((invoice) => (
           <InvoiceRow
             key={invoice.id}
             invoice={invoice}
