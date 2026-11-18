@@ -7,12 +7,12 @@ import {
   createInvoice,
   deleteInvoice,
   getAllInvoice,
-  updateInvoice,
+  updateInvoice
 } from './invoiceApi.ts';
 import type {
   Invoice,
   InvoiceFieldErrors,
-  InvoiceInput,
+  InvoiceInput
 } from './invoiceType.ts';
 
 export default function InvoicePage() {
@@ -22,24 +22,28 @@ export default function InvoicePage() {
   >([]);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<InvoiceFieldErrors>(
-    {},
+    {}
   );
   const [busy, setBusy] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [dialogContent, setDialogContent] = useState(false);
   const [target, setTarget] = useState<Invoice | null>(null);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const dialogRef = useRef<HTMLDialogElement>(null);
+
   function openModal(invoice: Invoice | null) {
     setTarget(invoice);
     setFormError(null);
     setDialogContent(true);
+
     dialogRef.current?.showModal();
   }
+
   function closeModal() {
     setFormError(null);
+
     dialogRef.current?.close();
   }
 
@@ -51,6 +55,7 @@ export default function InvoicePage() {
       } catch (error) {
         if (error instanceof Error) setError(error.message);
       }
+
       setLoading(false);
     }
     getInvoices();
@@ -61,13 +66,17 @@ export default function InvoicePage() {
       try {
         const response = await fetch('/api/customers/options');
 
-        if (!response.ok) throw new Error('Falha ao buscar clientes');
+        if (!response.ok)
+          throw new Error('Falha ao buscar clientes.');
+
         const datas = await response.json();
+
         setCustomersOptions(datas);
       } catch (error) {
         if (error instanceof Error) setError(error.message);
       }
     }
+
     getCustomersOptions();
   }, []);
 
@@ -87,12 +96,14 @@ export default function InvoicePage() {
     try {
       if (!target) {
         const failure = await createInvoice(datas);
-        if (failure) setFieldErrors(failure?.fields);
+
+        if (failure) return setFieldErrors(failure.fields);
       } else {
         await updateInvoice(target.id, datas);
       }
-      await refresh();
+
       closeModal();
+      await refresh();
     } catch (error) {
       if (error instanceof Error) setFormError(error.message);
     } finally {
@@ -111,36 +122,36 @@ export default function InvoicePage() {
 
       setConfirmDelete(false);
       closeModal();
+
       await refresh();
     } catch (error) {
       if (error instanceof Error) setFormError(error.message);
     }
+
     setBusy(false);
   }
 
-  if (loading) return <p>Carregando Faturas....</p>;
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <p className='text-sm text-text-muted'>Carregando...</p>;
+
+  if (error) return <p className='text-overdue'>{error}</p>;
+
   return (
     <>
-      <header className="page-header">
-        <h1 className="page-header">Faturas</h1>
+      <header className='flex justify-between items-center mb-6'>
+        <h1 className='text-xl font-semibold'>Faturas</h1>
         <button
-          className="button-primary"
+          className='bg-primary px-4 py-2 rounded-control cursor-pointer focus-visible:outline-2 focus-visible:outline-primary'
           type="button"
           onClick={() => openModal(null)}
         >
           Nova fatura
         </button>
       </header>
-
-      <div className="panel">
+      <div className='p-4 bg-surface border border-border rounded-surface'>
         <InvoiceTable invoices={invoices} edit={openModal} />
       </div>
-
       <dialog
-        className="invoice-modal"
+        className='m-auto w-xl p-6 bg-surface backdrop:bg-background-backdrop border border-border rounded-dialog text-text focus-visible:outline-2 focus-visible:outline-primary'
         ref={dialogRef}
         onClose={() => {
           setDialogContent(false);
@@ -154,10 +165,10 @@ export default function InvoicePage() {
             customers={customersOptions}
             error={formError}
             fieldErrors={fieldErrors}
-            onDelete={() => setConfirmDelete(true)}
             confirmDelete={confirmDelete}
             setConfirmDelete={setConfirmDelete}
             confirm={confirm}
+            onDelete={() => setConfirmDelete(true)}
             onCancel={closeModal}
             onSubmit={submit}
             busy={busy}

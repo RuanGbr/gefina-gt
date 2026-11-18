@@ -1,4 +1,4 @@
-@import 'tailwindcss'
+@import "tailwindcss";
 
 @theme {
   --color-background: #0f1117;
@@ -17,9 +17,5 @@
   --radius-surface: 10px;
   --radius-dialog: 14px;
 
-  --text-lg: 1.25rem;
-  --text-xl: 1.5rem;
-
   --font-sans: "Inter", system-ui, sans-serif;
-
 }
