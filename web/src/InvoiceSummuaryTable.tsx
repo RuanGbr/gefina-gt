@@ -3,7 +3,7 @@ import { formatCurrency, formatDate } from './utils';
 
 interface InvoiceSummuaryTable {
   title: string;
-  dataLabel: string;
+  dateLabel: string;
   invoices: Invoice[];
   date: (invoice: Invoice) => string;
 }
@@ -12,14 +12,14 @@ export default function InvoiceSummuaryTable(
   props: InvoiceSummuaryTable,
 ) {
   return (
-    <div className="panel">
+    <div className="flex-1 p-4 bg-surface border border-border rounded-surface">
       <h2>{props.title}</h2>
       <table>
         <thead>
           <tr>
             <th>Cliente</th>
             <th>Valor</th>
-            <th className="numeric-date">{props.dataLabel}</th>
+            <th className="numeric-date">{props.dateLabel}</th>
           </tr>
         </thead>
         <tbody>
