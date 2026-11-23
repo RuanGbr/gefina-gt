@@ -1,5 +1,5 @@
-import type { Invoice } from './invoiceType';
-import { formatCurrency, formatDate } from './utils';
+import type { Invoice } from '../types/invoiceType';
+import { formatCurrency, formatDate } from '../utils';
 
 interface InvoiceSummuaryTable {
   title: string;
