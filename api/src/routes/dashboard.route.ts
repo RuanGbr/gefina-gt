@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import findDashboard from './dashboard.service.ts';
+import findDashboard from '../services/dashboard.service.ts';
 
 const router = Router();
 router.get('/', async (_request, response) => {
