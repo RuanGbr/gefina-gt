@@ -16,7 +16,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <aside className="fixed w-60 top-0 bottom-0 flex flex-col gap-8 p-6 bg-surface border-r border-border">
-        <header className="text-xl text-center uppercase font-bold">
+        <header className="flex items-center justify-center gap-2 text-xl uppercase font-bold">
+          <img src="/logo.png" alt="" className="h-8 w-auto" />
           Gefina
         </header>
 
@@ -27,7 +28,7 @@ export default function App() {
                 className={({ isActive }) => apply(isActive)}
                 to="/"
               >
-                Painiel Inicial
+                Painel Inicial
               </NavLink>
             </li>
             <li>
