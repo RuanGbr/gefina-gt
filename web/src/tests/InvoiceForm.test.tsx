@@ -129,10 +129,10 @@ describe('InvoiceForm', () => {
     );
 
     expect(
-      screen.getByRole('button', { name: 'Salvando....' }),
+      screen.getByRole('button', { name: 'Salvando...' }),
     ).toHaveProperty('disabled', true);
     expect(
-      screen.getByRole('button', { name: 'Salvando....' }),
+      screen.getByRole('button', { name: 'Salvando...' }),
     ).toHaveProperty('disabled', true);
   });
   it('apresenta mensagem de falha recebida', () => {
